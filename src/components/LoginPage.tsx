@@ -1,4 +1,4 @@
-import  { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const LoginPage = () => {
@@ -59,9 +59,9 @@ const LoginPage = () => {
         <img
           src={logourl}
           alt="Logo"
-          className="w-20 h-20 object-contain mb-4"
+          className="w-20 h-20 object-contain mb-4 cursor-pointer"
         />
-        <h1 className="text-xl font-bold mb-4">
+        <h1 className="text-xl font-bold mb-4 cursor-pointer">
           {isLogin ? "Log in" : "Sign up"}
         </h1>
 
@@ -77,6 +77,7 @@ const LoginPage = () => {
               required
             />
           )}
+
           <input
             type="email"
             name="email"
@@ -86,6 +87,12 @@ const LoginPage = () => {
             className="p-2 rounded border border-gray-300 outline-0"
             required
           />
+          {formData.email && !isEmailValid && (
+            <div className="text-sm text-red-700 bg-red-100 px-3 py-1 rounded">
+              Email must end with <strong>@gmail.com</strong>
+            </div>
+          )}
+
           <input
             type="password"
             name="password"
@@ -95,6 +102,7 @@ const LoginPage = () => {
             className="p-2 rounded border border-gray-300 outline-0"
             required
           />
+
           <button
             type="submit"
             className="bg-black text-white py-2 rounded cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
@@ -107,7 +115,7 @@ const LoginPage = () => {
         <button
           onClick={() => {
             setIsLogin(!isLogin);
-            setFormData({ username: "", email: "", password: "" }); // reset form
+            setFormData({ username: "", email: "", password: "" });
           }}
           className="mt-4 text-sm text-black"
         >
