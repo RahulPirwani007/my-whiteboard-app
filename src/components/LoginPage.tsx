@@ -1,23 +1,33 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+interface FormData {
+  username: string;
+  email: string;
+  password: string;
+}
+
 const LoginPage = () => {
   const [isLogin, setIsLogin] = useState(true);
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     username: "",
     email: "",
     password: "",
   });
+
   const navigate = useNavigate();
 
-  const isPasswordValid = formData.password.length > 8;
   const isEmailValid = formData.email.endsWith("@gmail.com");
-  const isFormValid = isPasswordValid && isEmailValid;
+  const isPasswordValid =
+    /^(?=.*[0-9])(?=.*[!@#$%^&*])[A-Za-z0-9!@#$%^&*]{8,}$/.test(
+      formData.password
+    );
+  const isFormValid = isEmailValid && isPasswordValid;
 
   const logourl =
     "https://img.freepik.com/premium-vector/vector-design-digital-sketch-icon-style_822882-216870.jpg";
 
-  const handleChange = (e: any) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
 
     if (name === "email") {
@@ -35,12 +45,14 @@ const LoginPage = () => {
     }
   };
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     const userData = {
       username: formData.username,
       email: formData.email,
     };
+
     if (isLogin) {
       console.log("Login with:", {
         email: formData.email,
@@ -50,6 +62,7 @@ const LoginPage = () => {
     } else {
       console.log("Signup with:", formData);
     }
+
     navigate("/whiteboard", { state: userData });
   };
 
@@ -102,6 +115,12 @@ const LoginPage = () => {
             className="p-2 rounded border border-gray-300 outline-0"
             required
           />
+          {formData.password && !isPasswordValid && (
+            <div className="text-sm text-red-700 bg-red-100 px-3 py-1 rounded">
+              Password must be at least 8 characters, contain a number and a
+              special character.
+            </div>
+          )}
 
           <button
             type="submit"
